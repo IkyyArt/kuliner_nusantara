@@ -140,46 +140,47 @@ include "koneksi.php";
     </section>
     <!-- article end -->
 
-    <!-- gallery begin -->
+        <!-- gallery begin -->
     <section id="gallery" class="text-center p-5 bg-danger-subtle">
       <div class="container">
         <h1 class="fw-bold display-4 pb-3">Gallery Kuliner</h1>
         <div id="carouselExample" class="carousel slide">
           <div class="carousel-inner">
+            <?php
+            // Ambil data gallery dari database
+            $sql_gallery = "SELECT * FROM gallery ORDER BY tanggal DESC LIMIT 6";
+            $hasil_gallery = $conn->query($sql_gallery);
+            $active = true;
+            
+            while($row_gallery = $hasil_gallery->fetch_assoc()) {
+            ?>
+            <div class="carousel-item <?= $active ? 'active' : '' ?>">
+              <img
+                src="img/<?= $row_gallery['gambar'] ?>"
+                class="d-block w-100"
+                style="height: 700px; object-fit: cover;"
+                alt="<?= htmlspecialchars($row_gallery['deskripsi']) ?>"
+              />            
+            </div>
+            <?php
+              $active = false;
+            }
+            
+            // Jika tidak ada data gallery
+            if ($hasil_gallery->num_rows == 0) {
+            ?>
             <div class="carousel-item active">
               <img
-                src="RENDANG.jpg"
+                src="img/RENDANG.jpg"
                 class="d-block w-100"
                 alt="Rendang Padang"
               />
+              <div class="carousel-caption d-none d-md-block">
+                <h5>Gallery Kosong</h5>
+                <p>Silakan tambah data gallery terlebih dahulu</p>
+              </div>
             </div>
-            <div class="carousel-item">
-              <img
-                src="soto.jpg"
-                class="d-block w-100"
-                alt="Soto Ayam Lamongan"
-              />
-            </div>
-            <div class="carousel-item">
-              <img
-                src="gado-gado.jpeg"
-                class="d-block w-100"
-                alt="Gado-gado Betawi"
-              />
-            </div>
-            <div class="carousel-item">
-              <img src="Sate.jpeg" class="d-block w-100" alt="Sate Ayam" />
-            </div>
-            <div class="carousel-item">
-              <img
-                src="NasiGoreng.jpg"
-                class="d-block w-100"
-                alt="Nasi Goreng"
-              />
-            </div>
-            <div class="carousel-item">
-              <img src="Rawon.jpg" class="d-block w-100" alt="Rawon" />
-            </div>
+            <?php } ?>
           </div>
           <button
             class="carousel-control-prev"
@@ -199,7 +200,7 @@ include "koneksi.php";
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
           </button>
-        </div>
+        </div>      
       </div>
     </section>
     <!-- gallery end -->
